@@ -1,29 +1,32 @@
-fn main() {
-    let mut s = String::from("hello world");
-
-    let word = first_word(&s); // word will get the value 5
-
-    s.clear(); // this empties the String, making it equal to ""
-
-    // word still has the value 5 here, but there's no more string that
-    // we could meaningfully use the value 5 with. word is now totally invalid!!!
-
+struct User {
+    active: bool,
+    username: String,
+    email: String,
+    sign_in_count: u64,
 }
 
-fn first_word(s: &String) -> usize {
-    // find the first word in a String WITHOUT using a slice
+fn main() {
+    let mut user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusernam123"),
+        active: true,
+        sign_in_count: 1,
+    };
 
-    // issues with this approach:
-    // because we are returning usize on its OWN,
-    // there is no way to guarantee that this number
-    // will still be valid in the future
-    let bytes = s.as_bytes();
+    user1.email = String::from("adifferentemail@example.com");
 
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return i;
-        }
+    // we moved user1 data to user2, no longer able to call user1
+    let user2 = User {
+        email: String::from("differentemail@example.com"),
+        ..user1
+    };
+}
+
+fn build_user(email: String, username: String) -> User {
+    User {
+        username,
+        email,
+        active: true,
+        sign_in_count: 1,
     }
-
-    s.len()
 }
